@@ -1,0 +1,15 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "teevra-observability"
+version = "1.0.0"
+description = "TEEVRA observability helpers"
+requires-python = ">=3.11"
+
+[tool.setuptools]
+packages = ["teevra_observability"]
+
+[tool.setuptools.package-dir]
+teevra_observability = "teevra_observability"

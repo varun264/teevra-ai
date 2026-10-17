@@ -1,0 +1,20 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "teevra-a2a"
+version = "1.0.0"
+description = "TEEVRA A2A HTTP helper"
+requires-python = ">=3.11"
+dependencies = [
+    "a2a-sdk>=1.0",
+    "fastapi",
+    "httpx",
+]
+
+[tool.setuptools]
+packages = ["teevra_a2a"]
+
+[tool.setuptools.package-dir]
+teevra_a2a = "teevra_a2a"

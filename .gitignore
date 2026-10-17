@@ -1,0 +1,36 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.eggs/
+.env
+.venv/
+venv/
+*.pyc
+
+# Node
+node_modules/
+apps/dashboard/dist/
+apps/dashboard/.vite/
+apps/worker-pwa/dist/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs / cache
+*.log
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Secrets (never commit real credentials)
+.env.local
+secrets/
+*.key
+*.pem
+
+# Terraform
+.terraform/
+*.tfstate
+*.tfstate.backup

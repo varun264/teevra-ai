@@ -1,0 +1,9 @@
+pydantic>=2.7.0
+pydantic-settings>=2.2.0
+tzdata
+ortools>=9.0
+fastapi>=0.133
+uvicorn>=0.31
+httpx>=0.27
+python-multipart>=0.0.9
+teevra-shared-schemas; teevra-simulation; teevra-a2a; teevra-scheduler-engine

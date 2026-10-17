@@ -1,0 +1,19 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "teevra-event-contracts"
+version = "0.1.0"
+description = "TEEVRA AI event contracts for Pub/Sub / Eventarc"
+requires-python = ">=3.11"
+dependencies = [
+    "teevra-shared-schemas>=0.1.0",
+    "pydantic>=2.7.0",
+]
+
+[tool.setuptools]
+packages = ["teevra_event_contracts"]
+
+[tool.setuptools.package-dir]
+teevra_event_contracts = "teevra_event_contracts"

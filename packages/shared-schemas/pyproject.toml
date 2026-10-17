@@ -1,0 +1,19 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "teevra-shared-schemas"
+version = "0.1.0"
+description = "TEEVRA AI shared Pydantic schemas"
+requires-python = ">=3.11"
+dependencies = [
+    "pydantic>=2.7.0",
+    "pydantic-settings>=2.2.0",
+]
+
+[tool.setuptools]
+packages = ["teevra_shared_schemas"]
+
+[tool.setuptools.package-dir]
+teevra_shared_schemas = ""

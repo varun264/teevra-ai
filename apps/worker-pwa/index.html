@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="te-IN">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>TEEVRA Worker</title>
+<meta name="mobile-web-app-capable" content="yes"><meta name="theme-color" content="#06b6d4">
+<style>
+  *{box-sizing:border-box} body{margin:0;font-family:Inter,system-ui,sans-serif;background:#0b0f19;color:#e2e8f0;height:100vh;display:flex;flex-direction:column}
+  .screen{display:none;flex-direction:column;align-items:center;justify-content:center;padding:16px;height:100%} .screen.active{display:flex}
+  .card{background:#111827;border:1px solid #334155;border-radius:16px;padding:24px;width:100%;max-width:360px}
+  h1{font-size:20px;margin:0 0 8px;color:#fff} p{font-size:14px;color:#94a3b8;margin:0 0 18px;line-height:1.5}
+  .prompt{font-size:20px;font-weight:700;text-align:center;margin:0 0 24px;color:#22d3ee}
+  .lang{display:flex;gap:8px;margin-bottom:18px}
+  .lang button{flex:1;padding:8px;border:1px solid #334155;border-radius:10px;background:#0f172a;color:#fff;font-size:13px;cursor:pointer}
+  .lang button.active{border-color:#22d3ee;color:#22d3ee}
+  .btn{width:100%;padding:16px;border-radius:12px;font-size:17px;font-weight:700;border:none;cursor:pointer;margin:8px 0;color:#fff}
+  .btn-ok{background:#22c55e} .btn-ok:active{background:#16a34a}
+  .btn-hot{background:#f59e0b} .btn-hot:active{background:#d97706}
+  .btn-sos{background:#dc2626} .btn-sos:active{background:#b91c1c}
+  .btn-ghost{background:#1f2937;border:1px solid #334155} .btn-ghost:active{background:#374151}
+  .consent{margin-top:16px;text-align:center;color:#94a3b8;font-size:12px;line-height:1.4}
+  .status{margin-top:14px;padding:10px;border-radius:8px;background:#064e3b;color:#fff;text-align:center;display:none}
+  .voice{margin-top:10px}
+  .disclaimer{margin-top:18px;font-size:11px;color:#64748b;text-align:center;line-height:1.4}
+  .toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#111827;border:1px solid #22d3ee;color:#22d3ee;padding:10px 18px;border-radius:8px;font-size:13px;display:none}
+</style>
+</head>
+<body>
+<div id="screen-consent" class="screen active">
+  <div class="card">
+    <div class="lang">
+      <button id="lang-te" class="active">తెలుగు</button>
+      <button id="lang-en">English</button>
+    </div>
+    <h1>ప్రమాణీకరణ / Consent</h1>
+    <p id="consent-text">ఈ యాప్ వేడి ప్రమాదాల ముందస్తు హెచ్చరిక కోసం ఉపయోగపడుతుంది. ఇది అత్యద్భుతం కాదు (ఇది ప్రమాణీకృత�ע్ కాదు). మీోద్య Galilee relazione... మైక్రోఫోన్ اختیారమే.</p>
+    <div class="consent">గోసపిellen ఉపయోగించాలనుకుంటున్నారా? <b>GPS ట్రాకింగ్ లేదు.</b></div>
+    <label style="display:flex;align-items:center;gap:8px;margin:14px 0;cursor:pointer"><input type="checkbox" id="voice-consent"/> <span>聲優 armé声 riportare? / నేను స్వోcesatuan ఇవ్వడానికి అంగీకరిస్తున్నాను</span></label>
+    <button class="btn btn-ok" id="btn-consent">పొందు / Continue</button>
+  </div>
+</div>
+<div id="screen-checkin" class="screen">
+  <div class="card">
+    <div class="lang">
+      <button id="lang2-te" class="active">తెలుగు</button>
+      <button id="lang2-en">English</button>
+    </div>
+    <div class="prompt" id="prompt">మీకు ఎలా ఉంది? నీళ్లు తాగారా?</div>
+    <button class="btn btn-ok" id="btn-ok">సరిగ్గా / OK</button>
+    <button class="btn btn-hot" id="btn-hot">చాలా వేడి / Too Hot</button>
+    <button class="btn btn-sos" id="btn-sos">సహాయం కావాలి / SOS</button>
+    <div class="voice"><button class="btn btn-ghost" id="btn-voice">గüre telemetry / Voice (fallback prerecorded Telugu)</button></div>
+    <div id="status" class="status">రికార్డ్ చేయబడింది / Recorded</div>
+    <div class="disclaimer">ఈ యాప్ ముందస్తు హెచ్చరిక కోసం మాత్రమే. ఇది అస్త్రం కాదు. సోస్ ట్రిగ్గర్ వెంటనే ప్రాధాన్యత హెచ్చరికను పadurasthundi. No GPS tracking.</div>
+  </div>
+</div>
+<div class="toast" id="toast"></div>
+<script>
+  const te = { prompt:"మీకు ఎలా ఉంది? నీళ్లు తాగారా?", ok:"సరిగ్గా / OK", tooHot:"చాలా వేడి / Too Hot", sos:"సహాయం కావాలి / SOS", voice:"గ註 felipe / Voice (prerecorded Telugu)", consent:"ఈ యాప్ వేడి ప్రమాదాల ముందస్తు హెచ్చరిక కోసం. GPS ట్రాకింగ్ లేదు. అంగీకరిస్తున్నారా?", continue:"పొందు / Continue", recorded:"రికార్డ్ చేయబడింది / Recorded", sosSent:"SOS పంపబడింది / SOS sent" };
+  const en = { prompt:"How are you? Have you had water?", ok:"OK", tooHot:"Too Hot", sos:"SOS Need Help", voice:"Voice (fallback prerecorded Telugu)", consent:"This app is for heat-risk early warning only. No GPS tracking. Consent?", continue:"Continue", recorded:"Recorded", sosSent:"SOS sent" };
+  let L = te;
+  let consented = false;
+  function setLang(l){ L = l === "te" ? te : en; document.querySelectorAll(".lang button").forEach((b,i)=>{b.className = i===0 ? "active" : ""}); document.getElementById("prompt").textContent = L.prompt; document.getElementById("btn-ok").textContent = L.ok; document.getElementById("btn-hot").textContent = L.tooHot; document.getElementById("btn-sos").textContent = L.sos; document.getElementById("btn-voice").textContent = L.voice; document.getElementById("consent-text").textContent = L.consent; document.getElementById("btn-consent").textContent = L.continue; }
+  document.getElementById("lang-te").onclick = ()=>setLang("te");
+  document.getElementById("lang-en").onclick = ()=>setLang("en");
+  document.getElementById("lang2-te").onclick = ()=>setLang("te");
+  document.getElementById("lang2-en").onclick = ()=>setLang("en");
+  document.getElementById("btn-consent").onclick = ()=>{ consented = true; document.getElementById("screen-consent").classList.remove("active"); document.getElementById("screen-checkin").classList.add("active"); };
+  function showStatus(msg){ const s=document.getElementById("status"); s.textContent=msg; s.style.display="block"; setTimeout(()=>{s.style.display="none"},1500); }
+  function toast(msg){ const t=document.getElementById("toast"); t.textContent=msg; t.style.display="block"; setTimeout(()=>{t.style.display="none"},2000); }
+  async function checkin(response){
+    try{
+      const res = await fetch("/api/worker/checkin", {method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({worker_id:"WRK-01",workstation_id:"WS-CNC-A",response,language:"te",voice_consent:consented})});
+      const j = await res.json();
+      showStatus(L.recorded);
+      if(response==="SOS"){ toast(L.sosSent); }
+    }catch(e){ toast("ఓపెన్ / offline — τοπ mächtigkeit: recorded locally"); showStatus(L.recorded); }
+  }
+  document.getElementById("btn-ok").onclick = ()=>checkin("OK");
+  document.getElementById("btn-hot").onclick = ()=>checkin("TOO_HOT");
+  document.getElementById("btn-sos").onclick = ()=>{ checkin("SOS"); };
+  document.getElementById("btn-voice").onclick = ()=>{ toast("ప్రాథమిక స్వోcesatuan / prerecorded voice fallback"); };
+  if("serviceWorker" in navigator){ navigator.serviceWorker.register("/sw.js"); }
+</script>
+</body>
+</html>

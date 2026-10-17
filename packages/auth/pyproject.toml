@@ -1,0 +1,18 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "teevra-auth"
+version = "1.0.0"
+description = "TEEVRA auth helpers"
+requires-python = ">=3.11"
+dependencies = [
+    "fastapi",
+]
+
+[tool.setuptools]
+packages = ["teevra_auth"]
+
+[tool.setuptools.package-dir]
+teevra_auth = "teevra_auth"

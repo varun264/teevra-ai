@@ -1,0 +1,14 @@
+{
+  "name": "TEEVRA Worker Check-In",
+  "short_name": "TEEVRA Worker",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0b0f19",
+  "theme_color": "#06b6d4",
+  "orientation": "portrait",
+  "icons": [
+    { "src": "/icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "/icon-512.png", "sizes": "512x512", "type": "image/png" }
+  ],
+  "lang": "te-IN"
+}

@@ -1,0 +1,18 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "teevra-mcp-common"
+version = "1.0.0"
+description = "TEEVRA MCP shared auth/audit helpers"
+requires-python = ">=3.11"
+dependencies = [
+    "pydantic>=2.7.0",
+]
+
+[tool.setuptools]
+packages = ["teevra_mcp_common"]
+
+[tool.setuptools.package-dir]
+teevra_mcp_common = "teevra_mcp_common"
